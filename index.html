@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DUMMY GENERATOR PRO</title>
+<style>
+body{
+background:#020a1f;
+font-family:Arial;
+color:white;
+text-align:center;
+}
+
+.box{
+width:700px;
+margin:auto;
+margin-top:60px;
+padding:20px;
+background:#06143a;
+border-radius:15px;
+box-shadow:0 0 25px cyan;
+}
+
+textarea{
+width:95%;
+height:180px;
+background:black;
+color:#00ffcc;
+font-size:16px;
+padding:10px;
+}
+
+button{
+padding:12px 30px;
+margin:10px;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+}
+
+.start{background:#00c853;color:white;}
+.stop{background:#d50000;color:white;}
+.copy{background:#00bcd4;color:black;}
+
+.livebox{
+margin-top:15px;
+color:#00ffcc;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>DUMMY GENERATOR PRO V1</h2>
+
+<textarea id="output"></textarea><br>
+
+<button class="start" onclick="startGen()">START</button>
+<button class="stop" onclick="stopGen()">STOP</button>
+<button class="copy" onclick="copyData()">COPY</button>
+
+<div class="livebox" id="count">TOTAL: 0</div>
+
+</div>
+
+<script>
+
+let running=false;
+let total=0;
+
+function randomNum(length){
+let result='';
+let chars='0123456789';
+for(let i=0;i<length;i++){
+result+=chars.charAt(Math.floor(Math.random()*chars.length));
+}
+return result;
+}
+
+function generate(){
+if(!running) return;
+
+let data=randomNum(16)+"|"+randomNum(2)+"|20"+randomNum(2)+"|"+randomNum(3);
+
+let box=document.getElementById("output");
+box.value+=data+"\n";
+
+total++;
+document.getElementById("count").innerText="TOTAL: "+total;
+
+setTimeout(generate,100);
+}
+
+function startGen(){
+running=true;
+generate();
+}
+
+function stopGen(){
+running=false;
+}
+
+function copyData(){
+let text=document.getElementById("output");
+text.select();
+document.execCommand("copy");
+alert("COPIED SUCCESS");
+}
+
+</script>
+
+</body>
+</html>
