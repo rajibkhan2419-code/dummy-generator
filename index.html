@@ -1,112 +1,193 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>DUMMY GENERATOR PRO</title>
+<title>MULTI BIN GENERATOR</title>
+
 <style>
+
 body{
-background:#020a1f;
-font-family:Arial;
+background:black;
 color:white;
-text-align:center;
+font-family:Arial;
 }
 
-.box{
-width:700px;
+.container{
+width:900px;
 margin:auto;
-margin-top:60px;
-padding:20px;
-background:#06143a;
-border-radius:15px;
-box-shadow:0 0 25px cyan;
+margin-top:30px;
+}
+
+.title{
+text-align:center;
+font-size:40px;
+font-weight:bold;
+margin-bottom:30px;
+}
+
+label{
+color:#7CFC00;
+font-size:18px;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:15px;
+background:#222;
+color:white;
+border:none;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#7CFC00;
+border:none;
+font-size:20px;
+font-weight:bold;
+cursor:pointer;
+margin-top:10px;
 }
 
 textarea{
-width:95%;
-height:180px;
-background:black;
-color:#00ffcc;
+width:100%;
+height:300px;
+background:#222;
+color:white;
 font-size:16px;
 padding:10px;
 }
 
-button{
-padding:12px 30px;
-margin:10px;
-border:none;
-border-radius:8px;
-font-size:16px;
-cursor:pointer;
+.flex{
+display:flex;
+gap:20px;
 }
 
-.start{background:#00c853;color:white;}
-.stop{background:#d50000;color:white;}
-.copy{background:#00bcd4;color:black;}
-
-.livebox{
-margin-top:15px;
-color:#00ffcc;
+.left{
+width:50%;
 }
+
+.right{
+width:50%;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<div class="box">
+<div class="container">
 
-<h2>DUMMY GENERATOR PRO V1</h2>
+<div class="title">MULTI BIN GENERATOR</div>
 
-<textarea id="output"></textarea><br>
+<div class="flex">
 
-<button class="start" onclick="startGen()">START</button>
-<button class="stop" onclick="stopGen()">STOP</button>
-<button class="copy" onclick="copyData()">COPY</button>
+<div class="left">
 
-<div class="livebox" id="count">TOTAL: 0</div>
+<label>BINS</label>
+<input type="text" id="bin" placeholder="371654xxxxx">
+
+<label>MONTH</label>
+<select id="month">
+<option value="random">Random</option>
+<option>01</option>
+<option>02</option>
+<option>03</option>
+<option>04</option>
+<option>05</option>
+<option>06</option>
+<option>07</option>
+<option>08</option>
+<option>09</option>
+<option>10</option>
+<option>11</option>
+<option>12</option>
+</select>
+
+<label>YEAR</label>
+<select id="year">
+<option value="random">Random</option>
+<option>2026</option>
+<option>2027</option>
+<option>2028</option>
+<option>2029</option>
+<option>2030</option>
+<option>2031</option>
+<option>2032</option>
+<option>2033</option>
+</select>
+
+<label>CVV</label>
+<input type="text" id="cvv" placeholder="xxx">
+
+<label>QUANTITY</label>
+<input type="number" id="qty" value="10">
+
+<button onclick="generate()">GENERATE</button>
+
+<button onclick="copy()">COPY CARDS</button>
+
+</div>
+
+<div class="right">
+
+<textarea id="output"></textarea>
+
+</div>
+
+</div>
 
 </div>
 
 <script>
 
-let running=false;
-let total=0;
-
-function randomNum(length){
-let result='';
-let chars='0123456789';
-for(let i=0;i<length;i++){
-result+=chars.charAt(Math.floor(Math.random()*chars.length));
+function rand(len){
+let s='';
+for(let i=0;i<len;i++){
+s+=Math.floor(Math.random()*10);
 }
-return result;
+return s;
 }
 
 function generate(){
-if(!running) return;
 
-let data=randomNum(16)+"|"+randomNum(2)+"|20"+randomNum(2)+"|"+randomNum(3);
+let bin=document.getElementById("bin").value;
+let month=document.getElementById("month").value;
+let year=document.getElementById("year").value;
+let cvv=document.getElementById("cvv").value;
+let qty=document.getElementById("qty").value;
 
-let box=document.getElementById("output");
-box.value+=data+"\n";
+let out="";
 
-total++;
-document.getElementById("count").innerText="TOTAL: "+total;
+for(let i=0;i<qty;i++){
 
-setTimeout(generate,100);
+let number=bin.replace(/x/gi,()=>rand(1));
+
+let m=month=="random"?rand(2):month;
+let y=year=="random"?(2026+Math.floor(Math.random()*8)):year;
+let c=cvv==""||cvv=="xxx"?rand(3):cvv;
+
+out+=number+"|"+m+"|"+y+"|"+c+"\n";
+
 }
 
-function startGen(){
-running=true;
-generate();
+document.getElementById("output").value=out;
+
 }
 
-function stopGen(){
-running=false;
-}
+function copy(){
 
-function copyData(){
 let text=document.getElementById("output");
+
 text.select();
+
 document.execCommand("copy");
-alert("COPIED SUCCESS");
+
+alert("COPIED");
+
 }
 
 </script>
